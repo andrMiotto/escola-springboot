@@ -20,7 +20,7 @@ public class ProfessorController {
     }
 
     @PostMapping
-    public ProfessorRespostaDTO createAluno(@RequestBody ProfessorRequiscaoDTO professorRequiscaoDTO) throws SQLException {
+    public ProfessorRespostaDTO create(@RequestBody ProfessorRequiscaoDTO professorRequiscaoDTO) throws SQLException {
         return professorService.create(professorRequiscaoDTO);
 
     }

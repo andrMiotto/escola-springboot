@@ -68,9 +68,6 @@ public class AlunoRepository {
 
         String query = "SELECT id,nome, email, matricula, data_nascimento FROM aluno WHERE id = ?";
 
-
-        List<Aluno> alunos = new ArrayList<>();
-
         try (Connection connection = Conexao.conectar();
              PreparedStatement stmt = connection.prepareStatement(query)) {
 

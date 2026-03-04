@@ -1,27 +1,29 @@
 package com.example.escola.repository;
 
+import com.example.escola.dto.curso.CursoRespostaDTO;
 import com.example.escola.model.Aluno;
-import com.example.escola.model.Professor;
+import com.example.escola.model.Curso;
 import com.example.escola.util.Conexao;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
 @Repository
-public class ProfessorRepository {
+public class CursoRepository {
 
-    public Professor create(Professor professor) throws SQLException {
 
-        String query = "INSERT INTO professor (nome, email, disciplina) VALUES (?,?,?)";
+    public Curso create(Curso curso) throws SQLException {
+
+        String query = "INSERT INTO curso (nome, codigo) VALUES (?,?)";
 
 
         try (Connection connection = Conexao.conectar();
              PreparedStatement stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
-            stmt.setString(1, professor.getNome());
-            stmt.setString(2, professor.getEmail());
-            stmt.setString(3, professor.getDisciplina());
+            stmt.setString(1, curso.getNome());
+            stmt.setString(2, curso.getCodigo());
 
 
             stmt.executeUpdate();
@@ -29,18 +31,18 @@ public class ProfessorRepository {
             ResultSet rs = stmt.getGeneratedKeys();
 
             if (rs.next()) {
-                professor.setId(rs.getInt(1));
+                curso.setId(rs.getInt(1));
             }
 
         }
 
-        return professor;
+        return curso;
     }
 
-    public List<Professor> listAll() throws SQLException {
-        List<Professor> professores = new ArrayList<>();
+    public List<Curso> listAll() throws SQLException {
+        List<Curso> cursos = new ArrayList<>();
 
-        String query = "SELECT id, nome, email,disciplina FROM professor";
+        String query = "SELECT id,nome, codigo FROM curso";
 
         try (Connection connection = Conexao.conectar();
              PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -50,22 +52,20 @@ public class ProfessorRepository {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String nome = rs.getString("nome");
-                String email = rs.getString("email");
-                String disciplina = rs.getString("disciplina");
+                String codigo = rs.getString("codigo");
 
-                Professor professor = new Professor(id, nome, email, disciplina);
-                professores.add(professor);
+
+                Curso curso = new Curso(id, nome, codigo);
+                cursos.add(curso);
             }
         }
 
-        return professores;
+        return cursos;
     }
 
-    public Professor listId(int id) throws SQLException {
+    public Curso listId(int id) throws SQLException {
 
-        String query = "SELECT id, nome, email,disciplina FROM professor WHERE id = ?";
-
-
+        String query = "SELECT id,nome,codigo FROM curso WHERE id = ?";
 
         try (Connection connection = Conexao.conectar();
              PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -76,10 +76,10 @@ public class ProfessorRepository {
             while (rs.next()) {
                 id = rs.getInt("id");
                 String nome = rs.getString("nome");
-                String email = rs.getString("email");
-                String disciplina = rs.getString("disciplina");
+                String codigo = rs.getString("codigo");
 
-                return new Professor(id, nome, email,disciplina);
+
+                return new Curso(id, nome, codigo);
             }
         }
         return null;
@@ -88,7 +88,7 @@ public class ProfessorRepository {
 
     public void delete(int id) throws SQLException {
 
-        String query = "DELETE FROM professor where id = ?";
+        String query = "DELETE FROM curso where id = ?";
 
         try (Connection connection = Conexao.conectar();
              PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -100,25 +100,26 @@ public class ProfessorRepository {
     }
 
 
-    public Professor update(Professor professor, int id) throws SQLException {
-        String query = "UPDATE professor SET nome = ?, email = ?, disciplina = ? WHERE id = ?";
+    public Curso update(Curso curso, int id) throws SQLException {
+        String query = "UPDATE curso SET nome = ?, codigo = ? WHERE id = ?";
 
 
         try (Connection connection = Conexao.conectar();
              PreparedStatement stmt = connection.prepareStatement(query)) {
 
-            stmt.setString(1, professor.getNome());
-            stmt.setString(2, professor.getEmail());
-            stmt.setString(3, professor.getDisciplina());
-            stmt.setInt(4, professor.getId());
+            stmt.setString(1, curso.getNome());
+            stmt.setString(2, curso.getCodigo());
+            stmt.setInt(3, curso.getId());
 
 
             stmt.executeUpdate();
         }
 
 
-        return professor;
+        return curso;
     }
+
+
 
 
 
